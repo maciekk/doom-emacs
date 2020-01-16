@@ -174,4 +174,12 @@
 ;; But don't be too shy to try out more advanced options using M-o.
 (after! ivy
   (define-key ivy-minibuffer-map (kbd "C-u") 'ivy-scroll-down-command)
-  (define-key ivy-minibuffer-map (kbd "C-d") 'ivy-scroll-up-command))
+  (define-key ivy-minibuffer-map (kbd "C-d") 'ivy-scroll-up-command)
+  (define-key ivy-minibuffer-map (kbd "S-<return>") 'ivy-alt-done)
+  )
+
+(setq deft-extensions '("org"))
+(setq deft-directory "~/org")
+(setq deft-recursive t)
+(setq deft-use-filename-as-title t)
+(setq deft-use-filter-string-for-filename t)
