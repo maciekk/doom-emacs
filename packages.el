@@ -52,3 +52,6 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 (package! org-super-agenda)
+
+;; Disable package, it introduces unnecessary :ID:s during org-capture.
+(package! org-bookmark-heading :disable t)

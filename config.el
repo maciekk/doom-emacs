@@ -26,22 +26,28 @@
 (setq doom-theme 'doom-one)
 
 ;; If you intend to use org, it is recommended you change this!
-;(setq org-directory "~/org/")
+;;(setq org-directory "~/org/")
 
 (use-package! org
   :config
-  (setq org-cycle-separator-lines 1)
+  (setq org-cycle-separator-lines 2
+        org-startup-folded 'content)
 
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
         org-archive-location "archives/%s_archive::"
         org-default-notes-file (concat org-directory "inbox.org"))
 
 ;;; Agenda
-  (setq org-agenda-span 1
+  (setq
+        ;;org-agenda-span 1
         org-agenda-start-on-weekday 1
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
-        org-agenda-sorting-strategy '(time-up todo-state-down priority-down))
+        org-agenda-sorting-strategy '(time-up todo-state-down priority-down)
+        ;; other options: ➥ ▼ → ▾
+        org-ellipsis "▼"
+        org-hide-emphasis-markers t)
+
   (setq org-agenda-files (list org-directory
                                (concat org-directory "projects")))
   (setq org-agenda-custom-commands
@@ -101,7 +107,12 @@
                                         ;(setq org-refile-targets
                                         ;'((nil :maxlevel . 1)
                                         ;  (org-agenda-files :maxlevel . 2)))
-)
+  ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+  ;; Specifically, use actual bullet chars in bullet lists.
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  )
 
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
@@ -138,5 +149,29 @@
 ;; Work-around suggested for https://github.com/hlissner/doom-emacs/issues/2039
 (setq-hook! 'eshell-mode-hook company-idle-delay nil)
 
-;; Amend Avy short-cut keys for home row on *Dvorak* keyboard layout.
-(setq avy-keys '(?a ?e ?o ?u ?i ?d ?h ?t ?n))
+;; Amend various jump shortcut target keys to be Dvorak-friendly.
+(after! avy
+  (setq avy-keys '(?a ?e ?o ?u ?i ?d ?h ?t ?n)))
+(after! ace-window
+  (setq aw-keys '(?a ?e ?o ?u ?i ?d ?h ?t ?n)))
+
+;; Disable addition of :ID:s to captured TODO items.
+;; Alas, doesn't fix things.
+(after! org (setq
+             org-id-track-globally nil
+             org-id-locations-file nil
+             org-id-locations-file-relative nil
+             ))
+
+;; Try NotGate's hack for now.
+(defun create-todo (s)
+  (interactive "sTODO ")
+  ;; [#A] [#B] [#C]
+  (append-to-file (format "** TODO %s\n" s) nil (concat org-directory "inbox.org")))
+(map! (:leader :desc "Create a TODO" "T" #'create-todo))
+
+;; Put back C-d and C-u bindings to scroll Ivy minibuffer.
+;; But don't be too shy to try out more advanced options using M-o.
+(after! ivy
+  (define-key ivy-minibuffer-map (kbd "C-u") 'ivy-scroll-down-command)
+  (define-key ivy-minibuffer-map (kbd "C-d") 'ivy-scroll-up-command))
