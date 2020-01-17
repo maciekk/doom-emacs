@@ -37,14 +37,20 @@
         org-archive-location "archives/%s_archive::"
         org-default-notes-file (concat org-directory "inbox.org"))
 
-;;; Agenda
+  ;; Agenda
   (setq
         org-agenda-span 1
         org-agenda-start-day "."
-        ;;org-agenda-start-on-weekday 1
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
-        org-agenda-sorting-strategy '(time-up todo-state-down priority-down)
+        ;; Not sure why need to use todo-state-up when want to use the TODO
+        ;; keyword sort order; thought org-todo-keywords would be interpreted in
+        ;; prio descending order.
+        org-agenda-sorting-strategy '(
+                                      (agenda habit-down time-up todo-state-up priority-down category-keep)
+                                      (todo priority-down category-keep)
+                                      (tags priority-down category-keep)
+                                      (search category-keep))
         ;; other options: ➥ ▼ → ▾
         org-ellipsis "▼"
         org-hide-emphasis-markers t)
@@ -54,7 +60,7 @@
   (setq org-agenda-custom-commands
         '(
           ;; ("n" "NOW view"
-          ;; ((tags "now/!-DONE-CANCELLED"
+          ;; ((tags "now/!-DONE-WAIT"
           ;; ((org-agenda-overriding-header "  --== NOW! ==--")))
           ;; (agenda "" ((org-agenda-span 7)
           ;; (org-agenda-start-on-weekday nil)))))
@@ -70,14 +76,13 @@
   ;; Patterned on:
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
-        (quote ((sequence "TODO(t)"
-                          "NEXT(n)"
-                          "STARTED(s)"
-                          "WAITING(w@/!)"
-                          "SOMEDAY(z)"
-                          "|"
-                          "DONE(d!/!)"
-                          "CANCELLED(c@/!)"))))
+        (quote ((sequence
+                 "NEXT(n)"
+                 "TODO(t)"
+                 "WAIT(w@/!)"
+                 "|"
+                 "DONE(d!/!)"
+                 "DROP(c@/!)"))))
   ;; Do not use fast tag selection if want to default to helm for this.
   ;; See: https://github.com/emacs-helm/helm/issues/1890
   ;; (setq org-tag-alist
@@ -90,9 +95,9 @@
   ;;        ("Net" . ?n)
   ;;        ("leisure" . ?l)
   ;;        ))
-                                        ;(setq org-global-properties
-                                        ;'(("Effort_ALL" .
-                                        ;"0 0:15 0:30 1:00 2:00 3:00 4:00 5:00 6:00 8:00")))
+  ;;(setq org-global-properties
+  ;;'(("Effort_ALL" .
+  ;;"0 0:15 0:30 1:00 2:00 3:00 4:00 5:00 6:00 8:00")))
   (setq org-capture-templates
         `(("t" "Todo" entry (file+headline ,(concat org-directory "inbox.org") "Tasks")
            "* TODO %?\n")
@@ -101,13 +106,14 @@
           ("j" "Journal" entry (file+datetree ,(concat org-directory "journal.org"))
            "* %?\n%c\nEntered on %U\n")))
 
-;;; Refiling
-                                        ;(setq org-refile-use-outline-path 'file)
-                                        ;(setq org-outline-path-complete-in-steps nil)
-                                        ;(setq org-completion-use-ido t)
-                                        ;(setq org-refile-targets
-                                        ;'((nil :maxlevel . 1)
-                                        ;  (org-agenda-files :maxlevel . 2)))
+  ;; Refiling
+  ;;(setq org-refile-use-outline-path 'file)
+  ;;(setq org-outline-path-complete-in-steps nil)
+  ;;(setq org-completion-use-ido t)
+  ;;(setq org-refile-targets
+  ;;'((nil :maxlevel . 1)
+  ;;  (org-agenda-files :maxlevel . 2)))
+
   ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   ;; Specifically, use actual bullet chars in bullet lists.
   (font-lock-add-keywords 'org-mode
