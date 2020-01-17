@@ -39,8 +39,9 @@
 
 ;;; Agenda
   (setq
-        ;;org-agenda-span 1
-        org-agenda-start-on-weekday 1
+        org-agenda-span 1
+        org-agenda-start-day "."
+        ;;org-agenda-start-on-weekday 1
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
         org-agenda-sorting-strategy '(time-up todo-state-down priority-down)
