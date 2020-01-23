@@ -55,3 +55,5 @@
 
 ;; Disable package, it introduces unnecessary :ID:s during org-capture.
 (package! org-bookmark-heading :disable t)
+
+(package! beacon)

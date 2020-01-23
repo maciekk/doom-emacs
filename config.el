@@ -3,7 +3,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
 
-
 ;; These are used for a number of things, particularly for GPG configuration,
 ;; some email clients, file templates and snippets.
 (setq user-full-name "Maciej Kalisiak"
@@ -19,15 +18,18 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (setq doom-font (font-spec :family "Input Mono" :size 16))
-(setq doom-big-font (font-spec :family "Input Mono" :size 28))
+(setq doom-big-font (font-spec :family "Input Mono" :size 24))
+
+(setq display-line-numbers-type 'nil)
+
+(setq calendar-week-start-day 1)
+(setq display-time-default-load-average nil)
+(display-time-mode)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. These are the defaults.
-(setq doom-theme 'doom-one)
-
-;; If you intend to use org, it is recommended you change this!
-;;(setq org-directory "~/org/")
+(setq doom-theme 'doom-spacegrey)
 
 (use-package! org
   :config
@@ -84,18 +86,6 @@
                  "|"
                  "DONE(d!/!)"
                  "DROP(c@/!)"))))
-  ;; Do not use fast tag selection if want to default to helm for this.
-  ;; See: https://github.com/emacs-helm/helm/issues/1890
-  ;; (setq org-tag-alist
-  ;;      '(("desk" . ?d)
-  ;;        ("work" . ?w)
-  ;;        ("garden" . ?g)
-  ;;        ("errands" . ?e)
-  ;;        ("basement" . ?b)
-  ;;        ("kitchen" . ?k)
-  ;;        ("Net" . ?n)
-  ;;        ("leisure" . ?l)
-  ;;        ))
   ;;(setq org-global-properties
   ;;'(("Effort_ALL" .
   ;;"0 0:15 0:30 1:00 2:00 3:00 4:00 5:00 6:00 8:00")))
@@ -122,9 +112,6 @@
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
   )
 
-;; If you want to change the style of line numbers, change this to `relative' or
-;; `nil' to disable it:
-(setq display-line-numbers-type 'relative)
 
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -171,13 +158,6 @@
              org-id-locations-file-relative nil
              ))
 
-;; Try NotGate's hack for now.
-(defun create-todo (s)
-  (interactive "sTODO ")
-  ;; [#A] [#B] [#C]
-  (append-to-file (format "** TODO %s\n" s) nil (concat org-directory "inbox.org")))
-(map! (:leader :desc "Create a TODO" "T" #'create-todo))
-
 ;; Put back C-d and C-u bindings to scroll Ivy minibuffer.
 ;; But don't be too shy to try out more advanced options using M-o.
 (after! ivy
@@ -192,6 +172,34 @@
 (setq deft-use-filename-as-title t)
 (setq deft-use-filter-string-for-filename t)
 
-(setq calendar-week-start-day 1)
-(setq display-time-default-load-average nil)
-(display-time-mode)
+;; `smartparens' config
+;; Turning off, it's more trouble then its worth.
+;; (As suggested on https://github.com/hlissner/doom-emacs/issues/1094)
+(after! smartparens
+  (smartparens-global-mode -1))
+
+;; (bind-keys
+;;  :map smartparens-mode-map
+;;  ("C-M-a" . sp-beginning-of-sexp)
+;;  ("C-M-e" . sp-end-of-sexp)
+;;
+;;  ("C-M-d" . sp-down-sexp)
+;;  ("C-M-u" . sp-up-sexp)
+;;  ("C-M-S-d" . sp-backward-down-sexp)
+;;  ("C-M-S-u" . sp-backward-up-sexp)
+;;
+;;  ("C-M-f" . sp-forward-sexp)
+;;  ("C-M-b" . sp-backward-sexp)
+;;
+;;  ("C-M-n" . sp-next-sexp)
+;;  ("C-M-p" . sp-previous-sexp)
+;;
+;;  ("C-S-f" . sp-forward-symbol)
+;;  ("C-S-b" . sp-backward-symbol))
+
+;; Might help with some issues.
+;; See: https://github.com/hlissner/doom-emacs/issues/216
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+
+(after! beacon
+  (beacon-mode 1))
