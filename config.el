@@ -17,8 +17,10 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Input Mono" :size 16))
-(setq doom-big-font (font-spec :family "Input Mono" :size 24))
+(setq mk/font "Input Mono")
+;;(setq mk/font "Fantasque Sans Mono")
+(setq doom-font (font-spec :family mk/font :size 16))
+(setq doom-big-font (font-spec :family mk/font :size 24))
 
 (setq display-line-numbers-type 'nil)
 
@@ -80,9 +82,9 @@
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
         (quote ((sequence
+                 "WAIT(w@/!)"
                  "NEXT(n)"
                  "TODO(t)"
-                 "WAIT(w@/!)"
                  "|"
                  "DONE(d!/!)"
                  "DROP(c@/!)"))))
@@ -110,9 +112,25 @@
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  (map! :map evil-org-mode-map
+        ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
+        :n [return] #'evil-ret
+        :n "RET"    #'evil-ret)
   )
 
 
+(use-package! org-fancy-priorities ; priority icons
+  ;; :hook (org-mode . org-fancy-priorities-mode)  ; already done by DOOM Emacs
+  :config (setq org-fancy-priorities-list '("■" "■" "■")))
+
+;; Problematic symbols (chars too tall, resulting in inconsistent line spacing)
+;;   ⊡⊠⚫⧗⧖
+;; Safe symbols:
+;;   ■□◷⌛⌚
+(define-abbrev-table 'global-abbrev-table '(
+    ("xpomo" "◷")  ;; used to represent 1 pomodoro in TODOs
+    ))
+(advice-add 'org-mode :after #'abbrev-mode)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -197,7 +215,7 @@
 ;;  ("C-S-f" . sp-forward-symbol)
 ;;  ("C-S-b" . sp-backward-symbol))
 
-;; Might help with some issues.
+;; Might help with some issues w/blocked rendering, unresponsiveness.
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
