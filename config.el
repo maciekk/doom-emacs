@@ -118,9 +118,9 @@
         :n "RET"    #'evil-ret)
   )
 
-
+;; TODO: put this back
 (use-package! org-fancy-priorities ; priority icons
-  ;; :hook (org-mode . org-fancy-priorities-mode)  ; already done by DOOM Emacs
+  :hook (org-mode . org-fancy-priorities-mode)
   :config (setq org-fancy-priorities-list '("■" "■" "■")))
 
 ;; Problematic symbols (chars too tall, resulting in inconsistent line spacing)
@@ -219,5 +219,56 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-(after! beacon
-  (beacon-mode 1))
+;;(after! beacon
+;;  (beacon-mode 1))
+
+(use-package! beacon
+  :diminish
+  :config (setq beacon-color "#666600")
+  :hook   ((org-mode text-mode) . beacon-mode))
+
+(use-package org-roam
+      :after org
+      :hook
+      ((org-mode . org-roam-mode)
+       (after-init . org-roam--build-cache-async) ;; optional!
+       )
+      ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
+      :custom
+      (org-roam-directory "~/org/zettels")
+      (org-roam-link-title-format "R:%s")
+      :bind
+      ("C-c n l" . org-roam)
+      ("C-c n t" . org-roam-today)
+      ("C-c n f" . org-roam-find-file)
+      ("C-c n i" . org-roam-insert)
+      ("C-c n g" . org-roam-show-graph)
+      ("C-c (" . org-mark-ring-goto))
+
+;; The following are based org-roam "ecosystem" suggestions.
+;; See: https://org-roam.readthedocs.io/en/latest/ecosystem/
+
+;; Read: https://blog.jethro.dev/posts/how_to_take_smart_notes_org/
+
+;; Use 'deft' in conjunction with 'org-roam'.
+(use-package deft
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/org/zettels"))
+
+;; Use 'org-journal' in conjunction with 'org-roam'.
+;; TODO: actually try this out. May involve installing 'org-journal'.
+;; Link for latter: https://github.com/bastibe/org-journal
+(use-package org-journal
+  :bind
+  ("C-c n j" . org-journal-new-entry)
+  :custom
+  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-dir "~/org/zettels")
+  (org-journal-date-format "%A, %d %B %Y"))
