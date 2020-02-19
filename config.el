@@ -118,7 +118,6 @@
         :n "RET"    #'evil-ret)
   )
 
-;; TODO: put this back
 (use-package! org-fancy-priorities ; priority icons
   :hook (org-mode . org-fancy-priorities-mode)
   :config (setq org-fancy-priorities-list '("■" "■" "■")))
@@ -218,9 +217,6 @@
 ;; Might help with some issues w/blocked rendering, unresponsiveness.
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
-
-;;(after! beacon
-;;  (beacon-mode 1))
 
 (use-package! beacon
   :diminish
