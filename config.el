@@ -111,12 +111,14 @@
   ;; Specifically, use actual bullet chars in bullet lists.
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
+
+(use-package! evil-org
+  :config
   (map! :map evil-org-mode-map
         ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
         :n [return] #'evil-ret
-        :n "RET"    #'evil-ret)
-  )
+        :n "RET"    #'evil-ret))
 
 (use-package! org-fancy-priorities ; priority icons
   :hook (org-mode . org-fancy-priorities-mode)
