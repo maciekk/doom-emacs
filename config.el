@@ -76,6 +76,9 @@
             (tags "REFILE"
                   ((org-agenda-overriding-header "Tasks to Refile")
                    (org-tags-match-list-sublevels 'indented)))))
+          ("N" "-= NOW =-"
+           ((todo "NEXT"
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
           ))
 
   ;; Patterned on:
@@ -113,12 +116,13 @@
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
 
-(use-package! evil-org
-  :config
-  (map! :map evil-org-mode-map
-        ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
-        :n [return] #'evil-ret
-        :n "RET"    #'evil-ret))
+;; Disabled for now because breaks navigation in org-roam.
+;; (use-package! evil-org
+;;   :config
+;;   (map! :map evil-org-mode-map
+;;         ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
+;;         :n [return] #'evil-ret
+;;         :n "RET"    #'evil-ret))
 
 (use-package! org-fancy-priorities ; priority icons
   :hook (org-mode . org-fancy-priorities-mode)
@@ -220,10 +224,10 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-(use-package! beacon
-  :diminish
-  :config (setq beacon-color "#666600")
-  :hook   ((org-mode text-mode) . beacon-mode))
+;; (use-package! beacon
+;;   :diminish
+;;   :config (setq beacon-color "#666600")
+;;   :hook   ((org-mode text-mode) . beacon-mode))
 
 (use-package org-roam
       :after org
@@ -236,23 +240,23 @@
       (org-roam-directory "~/org/zettels")
       (org-roam-link-title-format "R:%s")
       :bind
-      ("C-c n l" . org-roam)
-      ("C-c n t" . org-roam-today)
-      ("C-c n f" . org-roam-find-file)
-      ("C-c n i" . org-roam-insert)
-      ("C-c n g" . org-roam-show-graph)
+      ("C-c z l" . org-roam)
+      ("C-c z t" . org-roam-today)
+      ("C-c z f" . org-roam-find-file)
+      ("C-c z i" . org-roam-insert)
+      ("C-c z g" . org-roam-show-graph)
       ("C-c (" . org-mark-ring-goto))
 
 ;; The following are based org-roam "ecosystem" suggestions.
 ;; See: https://org-roam.readthedocs.io/en/latest/ecosystem/
 
-;; Read: https://blog.jethro.dev/posts/how_to_take_smart_notes_org/
+;; Also, read: https://blog.jethro.dev/posts/how_to_take_smart_notes_org/
 
 ;; Use 'deft' in conjunction with 'org-roam'.
 (use-package deft
   :after org
   :bind
-  ("C-c n d" . deft)
+  ("C-c z d" . deft)
   :custom
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
