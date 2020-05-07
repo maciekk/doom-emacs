@@ -77,7 +77,8 @@
                   ((org-agenda-overriding-header "Tasks to Refile")
                    (org-tags-match-list-sublevels 'indented)))))
           ("N" "-= NOW =-"
-           ((todo "NEXT")))
+           ((todo "NEXT"
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
           ))
 
   ;; Patterned on:
@@ -113,16 +114,18 @@
   ;; Specifically, use actual bullet chars in bullet lists.
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-  (map! :map evil-org-mode-map
-        ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
-        :n [return] #'evil-ret
-        :n "RET"    #'evil-ret)
-  )
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
 
+;; Disabled for now because breaks navigation in org-roam.
+;; (use-package! evil-org
+;;   :config
+;;   (map! :map evil-org-mode-map
+;;         ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
+;;         :n [return] #'evil-ret
+;;         :n "RET"    #'evil-ret))
 
 (use-package! org-fancy-priorities ; priority icons
-  ;; :hook (org-mode . org-fancy-priorities-mode)  ; already done by DOOM Emacs
+  :hook (org-mode . org-fancy-priorities-mode)
   :config (setq org-fancy-priorities-list '("■" "■" "■")))
 
 ;; Problematic symbols (chars too tall, resulting in inconsistent line spacing)
@@ -221,5 +224,53 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-(after! beacon
-  (beacon-mode 1))
+;; (use-package! beacon
+;;   :diminish
+;;   :config (setq beacon-color "#666600")
+;;   :hook   ((org-mode text-mode) . beacon-mode))
+
+(use-package org-roam
+      :after org
+      ;:hook
+      ;((org-mode . org-roam-mode)
+      ; (after-init . org-roam--build-cache-async) ;; optional!
+      ; )
+      ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
+      :custom
+      (org-roam-directory "~/org/zettels")
+      (org-roam-link-title-format "R:%s")
+      :bind
+      ("C-c z l" . org-roam)
+      ("C-c z t" . org-roam-today)
+      ("C-c z f" . org-roam-find-file)
+      ("C-c z i" . org-roam-insert)
+      ("C-c z g" . org-roam-show-graph)
+      ("C-c (" . org-mark-ring-goto))
+
+;; The following are based org-roam "ecosystem" suggestions.
+;; See: https://org-roam.readthedocs.io/en/latest/ecosystem/
+
+;; Also, read: https://blog.jethro.dev/posts/how_to_take_smart_notes_org/
+
+;; Use 'deft' in conjunction with 'org-roam'.
+(use-package deft
+  :after org
+  :bind
+  ("C-c z d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/org/zettels"))
+
+;; Use 'org-journal' in conjunction with 'org-roam'.
+;; TODO: actually try this out. May involve installing 'org-journal'.
+;; Link for latter: https://github.com/bastibe/org-journal
+(use-package org-journal
+  :bind
+  ("C-c n j" . org-journal-new-entry)
+  :custom
+  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-dir "~/org/zettels")
+  (org-journal-date-format "%A, %d %B %Y"))
