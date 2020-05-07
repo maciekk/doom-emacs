@@ -56,7 +56,7 @@
 ;; Disable package, it introduces unnecessary :ID:s during org-capture.
 (package! org-bookmark-heading :disable t)
 
-(package! org-roam :recipe (:type git :host github :repo "jethrokuan/org-roam"))
+;(package! org-roam :recipe (:type git :host github :repo "jethrokuan/org-roam"))
 
 (package! org-fancy-priorities)
 

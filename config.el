@@ -231,10 +231,10 @@
 
 (use-package org-roam
       :after org
-      :hook
-      ((org-mode . org-roam-mode)
-       (after-init . org-roam--build-cache-async) ;; optional!
-       )
+      ;:hook
+      ;((org-mode . org-roam-mode)
+      ; (after-init . org-roam--build-cache-async) ;; optional!
+      ; )
       ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
       :custom
       (org-roam-directory "~/org/zettels")
