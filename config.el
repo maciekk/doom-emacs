@@ -76,6 +76,8 @@
             (tags "REFILE"
                   ((org-agenda-overriding-header "Tasks to Refile")
                    (org-tags-match-list-sublevels 'indented)))))
+          ("N" "-= NOW =-"
+           ((todo "NEXT")))
           ))
 
   ;; Patterned on:
