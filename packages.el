@@ -61,3 +61,5 @@
 (package! org-fancy-priorities)
 
 (package! beacon)
+
+(package! org-superstar)
