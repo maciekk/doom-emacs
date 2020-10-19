@@ -40,7 +40,8 @@
 
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
         org-archive-location "archives/%s_archive::"
-        org-default-notes-file (concat org-directory "inbox.org"))
+        org-default-notes-file (concat org-directory "inbox.org")
+        org-reverse-note-order t)
 
   ;; Agenda
   (setq
@@ -110,11 +111,14 @@
   ;;'((nil :maxlevel . 1)
   ;;  (org-agenda-files :maxlevel . 2)))
 
-  ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
-  ;; Specifically, use actual bullet chars in bullet lists.
-  (font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
+(require 'org-superstar)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+
+;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+;; Specifically, use actual bullet chars in bullet lists.
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                        (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
 
 ;; Disabled for now because breaks navigation in org-roam.
 ;; (use-package! evil-org
@@ -274,3 +278,4 @@
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-dir "~/org/zettels")
   (org-journal-date-format "%A, %d %B %Y"))
+
