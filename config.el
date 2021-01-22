@@ -87,6 +87,7 @@
   (setq org-todo-keywords
         (quote ((sequence
                  "WAIT(w@/!)"
+                 "STARTED(s)"
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
