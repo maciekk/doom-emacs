@@ -68,6 +68,7 @@
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ibuffer           ; interactive buffer management
+       undo              ; gives undo-fu; could also do (undo +tree) for undo-tree
        vc                ; version-control and Emacs, sitting in a tree
 
        :term

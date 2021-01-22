@@ -116,7 +116,7 @@
 (setq org-superstar-item-bullet-alist
       '((?* . ?•)
         (?+ . ?-)
-        (?- . ?⋅)))
+        (?- . ?∙)))
 
 ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 ;; Specifically, use actual bullet chars in bullet lists.
@@ -283,3 +283,13 @@
   (org-journal-dir "~/org/zettels")
   (org-journal-date-format "%A, %d %B %Y"))
 
+;; Turn on auto-fill-mode for key major modes.
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+;; Stop the warnings about depending on 'cl'. (does this actually work?)
+;; More info: https://github.com/hlissner/doom-emacs/issues/3372
+(setq byte-complile-warnings '(not cl-functions))
+
+;; Set this so redo (C-r) works.
+;(set-evil-undo-system 'undo-fu)         ; alternative: 'undo-tree
