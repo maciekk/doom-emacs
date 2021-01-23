@@ -74,7 +74,7 @@
           ;; ((org-agenda-overriding-header "  === HOTLIST ===")))
           ("z" "Agenda"
            ((agenda "" nil)
-            (tags "REFILE"
+            (tags-todo "REFILE"
                   ((org-agenda-overriding-header "Tasks to Refile")
                    (org-tags-match-list-sublevels 'indented)))))
           ("N" "-= NOW =-"
