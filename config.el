@@ -31,7 +31,43 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. These are the defaults.
-(setq doom-theme 'doom-spacegrey)
+;(setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-solarized-light)
+
+;;; Helper functions
+(defun mk/org-next-open-task ()
+  "Advance point to next taks that is 'not done'."
+  (interactive)
+  (while (not (looking-at org-not-done-heading-regexp))
+    (org-next-visible-heading 1)))
+
+(defun mk/org-resort-todos ()
+  "Sort the tasks in subtree under point; order:
+  - first, by TODO keyword (e.g., DONE > STARTED > NEXT > TODO)
+  - second, by PRIORITY"
+  (interactive)
+  (outline-up-heading 10)
+  (org-sort-entries t ?p)
+  (org-sort-entries t ?o)
+  (org-overview)
+  (org-cycle)
+  (mk/org-next-open-task))
+
+(defun mk/jump-to-end-of-journal ()
+  "Jumps to end of my journal file (thus presumably to latest entry)."
+  (interactive)
+  (find-file "~/org/GTD/journal.org")
+  )
+
+(defun mk/org-narrow-to-subtree ()
+  "Narrows buffer to the current subtree I am within.
+   Non-nil prefix widens buffer."
+  (interactive)
+  (if (equal current-prefix-arg nil)
+      (progn
+        (outline-up-heading 1)
+        (org-narrow-to-subtree))
+      (widen)))
 
 (use-package! org
   :config
@@ -49,6 +85,8 @@
         org-agenda-start-day "."
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
+        org-priority-start-cycle-with-default nil
+        org-use-speed-commands t
         ;; Not sure why need to use todo-state-up when want to use the TODO
         ;; keyword sort order; thought org-todo-keywords would be interpreted in
         ;; prio descending order.
@@ -86,13 +124,13 @@
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
         (quote ((sequence
-                 "WAIT(w@/!)"
+                 "WAIT(w@)"
                  "STARTED(s)"
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
-                 "DONE(d!/!)"
-                 "DROP(c@/!)"))))
+                 "DONE(d)"
+                 "DROP(c@)"))))
   ;;(setq org-global-properties
   ;;'(("Effort_ALL" .
   ;;"0 0:15 0:30 1:00 2:00 3:00 4:00 5:00 6:00 8:00")))
@@ -102,7 +140,11 @@
           ("T" "Todo w/context" entry (file+headline ,(concat org-directory "inbox.org") "Tasks")
            "* TODO %?\n  %a")
           ("j" "Journal" entry (file+datetree ,(concat org-directory "journal.org"))
-           "* %?\n%c\nEntered on %U\n")))
+           "* %?\n")))
+
+  ;; Switch to Insert mode whenever entering context note (e.g., TODO -> WAIT transition)
+  ;; Source: https://emacs.stackexchange.com/questions/41265/how-do-i-automatically-enter-evil-insert-state-after-running-the-org-add-note-co
+  (add-hook 'org-log-buffer-setup-hook 'evil-insert-state)
 
   ;; Refiling
   ;;(setq org-refile-use-outline-path 'file)
@@ -112,18 +154,28 @@
   ;;'((nil :maxlevel . 1)
   ;;  (org-agenda-files :maxlevel . 2)))
 
-(require 'org-superstar)
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-(setq org-superstar-item-bullet-alist
-      '((?* . ?•)
-        (?+ . ?-)
-        (?- . ?∙)))
+  ;; TODO: should this be outside the use-package?
+  (require 'org-superstar)
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-item-bullet-alist
+        '((?* . ?•)
+          (?+ . ?-)
+          (?- . ?∙)))
 
-;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
-;; Specifically, use actual bullet chars in bullet lists.
-(font-lock-add-keywords 'org-mode
-                        '(("^ *\\([-]\\) "
-                        (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
+  ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+  ;; Specifically, use actual bullet chars in bullet lists.
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  :bind (
+   ;; global map mappings
+   ("C-c s" . mk/org-resort-todos)
+   ("C-c j" . mk/jump-to-end-of-journal)
+   ("C-c n" . mk/org-narrow-to-subtree)
+   :map org-mode-map
+   ;; org-mode map mappings (useful for overrides)
+   )
+  )  ;; end of "use-package! org"
 
 ;; Disabled for now because breaks navigation in org-roam.
 ;; (use-package! evil-org

@@ -63,3 +63,5 @@
 (package! beacon)
 
 (package! org-superstar)
+
+;(package! org-journal)
