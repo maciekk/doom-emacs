@@ -17,10 +17,16 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq mk/font "Input Mono")
-;;(setq mk/font "Fantasque Sans Mono")
+;;(setq mk/font "Fira Code")
+;;(setq mk/font "Input Mono")
+(setq mk/font "Fantasque Sans Mono")
 (setq doom-font (font-spec :family mk/font :size 16))
 (setq doom-big-font (font-spec :family mk/font :size 24))
+;;(setq doom-variable-pitch-font (font-spec :family "ETBembo" :size 18))
+(setq doom-variable-pitch-font (font-spec :family "Alegreya" :size 18))
+
+(add-hook! 'org-mode-hook #'mixed-pitch-mode)
+(setq mixed-pitch-variable-pitch-cursor nil)
 
 (setq display-line-numbers-type 'nil)
 
@@ -329,7 +335,7 @@
 ;; Link for latter: https://github.com/bastibe/org-journal
 (use-package org-journal
   :bind
-  ("C-c n j" . org-journal-new-entry)
+  ("C-c J" . org-journal-new-entry)
   :custom
   (org-journal-date-prefix "#+TITLE: ")
   (org-journal-file-format "%Y-%m-%d.org")

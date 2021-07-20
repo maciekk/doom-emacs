@@ -64,4 +64,10 @@
 
 (package! org-superstar)
 
-;(package! org-journal)
+(package! org-journal)
+
+;; work around for magit bug
+;; source: https://github.com/hlissner/doom-emacs/issues/2415
+(when (featurep! :tools magit)
+  (package! magit-section)
+  (package! orgit :pin "e7cddf39e301c87c36c7de13e429dee74874d5c8"))
