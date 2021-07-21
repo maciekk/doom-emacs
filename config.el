@@ -339,7 +339,7 @@
   :custom
   (org-journal-date-prefix "#+TITLE: ")
   (org-journal-file-format "%Y-%m-%d.org")
-  (org-journal-dir "~/org/zettels")
+  (org-journal-dir "~/org/journal")
   (org-journal-date-format "%A, %d %B %Y"))
 
 ;; Turn on auto-fill-mode for key major modes.
