@@ -105,6 +105,10 @@
         org-ellipsis "▼"
         org-hide-emphasis-markers t)
 
+  ;; Other simple settings
+  (setq org-pretty-entities t
+        org-hidden-keywords '(title))
+
   (setq org-agenda-files (list org-directory
                                (concat org-directory "projects")))
   (setq org-agenda-custom-commands
@@ -352,3 +356,9 @@
 
 ;; Set this so redo (C-r) works.
 ;(set-evil-undo-system 'undo-fu)         ; alternative: 'undo-tree
+
+(add-hook 'org-mode-hook 'org-appear-mode)
+(setq org-appear-autolinks t
+      org-appear-autoentities t
+      org-appear-autokeywords t
+      org-appear-delay 0.5)

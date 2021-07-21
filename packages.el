@@ -66,6 +66,8 @@
 
 (package! org-journal)
 
+(package! org-appear)
+
 ;; work around for magit bug
 ;; source: https://github.com/hlissner/doom-emacs/issues/2415
 (when (featurep! :tools magit)
