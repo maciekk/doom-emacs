@@ -362,3 +362,15 @@
       org-appear-autoentities t
       org-appear-autokeywords t
       org-appear-delay 0.5)
+
+;; focus-mode setup
+;; Based on: https://orgmode.org/list/87r1wd32kg.fsf@gmail.com/T/
+(defun forward-subtree (&optional N)
+   "Forward one orgmode-heading for thing-at-point"
+   (interactive "p")
+   (if (= N -1)
+       (org-backward-heading-same-level 1)
+     (org-forward-heading-same-level 1)))
+
+(setq focus-mode-to-thing '((org-mode . subtree)))
+;; now just run focus-mode

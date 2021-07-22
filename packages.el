@@ -60,13 +60,14 @@
 
 (package! org-fancy-priorities)
 
-(package! beacon)
-
 (package! org-superstar)
 
 (package! org-journal)
 
 (package! org-appear)
+
+(package! focus)
+;(package! thingatpt)
 
 ;; work around for magit bug
 ;; source: https://github.com/hlissner/doom-emacs/issues/2415
