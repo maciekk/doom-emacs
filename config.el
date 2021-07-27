@@ -347,8 +347,13 @@
 ;; Use 'deft' in conjunction with 'org-roam'.
 (use-package deft
   :after org
-  :bind
-  ("C-c z d" . deft)
+  :bind (
+         ;; global
+         ("C-c z d" . deft)
+         ;; within deft-mode
+         :map deft-mode-map
+         ("C-c C-o" . deft-open-file-other-window)
+         )
   :custom
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
