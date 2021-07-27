@@ -8,6 +8,12 @@
 (setq user-full-name "Maciej Kalisiak"
       user-mail-address "maciej.kalisiak@gmail.com")
 
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. These are the defaults.
+;(setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-solarized-light)
+
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -23,22 +29,21 @@
 (setq doom-font (font-spec :family mk/font :size 16))
 (setq doom-big-font (font-spec :family mk/font :size 24))
 ;;(setq doom-variable-pitch-font (font-spec :family "ETBembo" :size 18))
-(setq doom-variable-pitch-font (font-spec :family "Alegreya" :size 18))
+(setq doom-variable-pitch-font (font-spec :family "Alegreya" :size 16))
 
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 (setq mixed-pitch-variable-pitch-cursor nil)
 
+;; variable pitch causes autocomplete popup to render wrong, and is just
+;; annoying in Org (does dict matching), so just turn it off.
+(setq company-global-modes '(not org-mode org-journal-mode))
+
 (setq display-line-numbers-type 'nil)
+(setq-default left-margin-width 1)
 
 (setq calendar-week-start-day 1)
 (setq display-time-default-load-average nil)
 (display-time-mode)
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. These are the defaults.
-;(setq doom-theme 'doom-spacegrey)
-(setq doom-theme 'doom-solarized-light)
 
 ;;; Helper functions
 (defun mk/org-next-open-task ()
@@ -77,22 +82,27 @@
 
 (use-package! org
   :config
-  (setq org-cycle-separator-lines 2
-        org-startup-folded 'content)
-
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
         org-archive-location "archives/%s_archive::"
         org-default-notes-file (concat org-directory "inbox.org")
         org-reverse-note-order t)
 
+  ;; simple, general settings
+  (setq org-cycle-separator-lines 0
+        org-startup-folded 'content
+        org-pretty-entities t
+        org-hidden-keywords '(title)
+        org-catch-invisible-edits 'show-and-error
+        )
+
   ;; Agenda
   (setq
-        org-agenda-span 1
+        org-agenda-span 3
         org-agenda-start-day "."
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
         org-priority-start-cycle-with-default nil
-        org-use-speed-commands t
+        ;org-use-speed-commands t
         ;; Not sure why need to use todo-state-up when want to use the TODO
         ;; keyword sort order; thought org-todo-keywords would be interpreted in
         ;; prio descending order.
@@ -104,10 +114,6 @@
         ;; other options: ➥ ▼ → ▾
         org-ellipsis "▼"
         org-hide-emphasis-markers t)
-
-  ;; Other simple settings
-  (setq org-pretty-entities t
-        org-hidden-keywords '(title))
 
   (setq org-agenda-files (list org-directory
                                (concat org-directory "projects")))
