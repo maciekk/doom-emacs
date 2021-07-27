@@ -400,3 +400,8 @@
 
 (setq focus-mode-to-thing '((org-mode . subtree)))
 ;; now just run focus-mode
+
+;; fix for deft-mode bindings not loading
+;; src: https://github.com/hlissner/doom-emacs/issues/3271
+;(add-hook 'deft-mode-hook #'evil-normalize-keymaps
+;; made things worse
