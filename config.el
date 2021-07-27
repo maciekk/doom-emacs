@@ -136,12 +136,32 @@
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
           ))
 
+  ;; (setq org-super-agenda-groups
+  ;;      '(;; Each group has an implicit boolean OR operator between its selectors.
+  ;;        (:name "Today"  ; Optionally specify section name
+  ;;               :time-grid t  ; Items that appear on the time grid
+  ;;               :todo "NEXT")  ; Items that have this TODO keyword
+  ;;        (:name "Important"
+  ;;               ;; Single arguments given alone
+  ;;               :tag "bills"
+  ;;               :priority "A")
+  ;;        ;; Groups supply their own section names when none are given
+  ;;        (:todo "WAIT" :order 8)  ; Set order of this section
+  ;;        (:priority<= "B"
+  ;;                     ;; Show this section after "Today" and "Important", because
+  ;;                     ;; their order is unspecified, defaulting to 0. Sections
+  ;;                     ;; are displayed lowest-number-first.
+  ;;                     :order 1)
+  ;;        ;; After the last group, the agenda will display items that didn't
+  ;;        ;; match any of these groups, with the default order position of 99
+  ;;        ))
+
   ;; Patterned on:
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
         (quote ((sequence
                  "WAIT(w@)"
-                 "STARTED(s)"
+                 "WIP(s)"
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
