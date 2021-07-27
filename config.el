@@ -295,11 +295,6 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-;; (use-package! beacon
-;;   :diminish
-;;   :config (setq beacon-color "#666600")
-;;   :hook   ((org-mode text-mode) . beacon-mode))
-
 (use-package org-roam
       :after org
       ;:hook
