@@ -8,6 +8,12 @@
 (setq user-full-name "Maciej Kalisiak"
       user-mail-address "maciej.kalisiak@gmail.com")
 
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. These are the defaults.
+;(setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-solarized-light)
+
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -23,22 +29,21 @@
 (setq doom-font (font-spec :family mk/font :size 16))
 (setq doom-big-font (font-spec :family mk/font :size 24))
 ;;(setq doom-variable-pitch-font (font-spec :family "ETBembo" :size 18))
-(setq doom-variable-pitch-font (font-spec :family "Alegreya" :size 18))
+(setq doom-variable-pitch-font (font-spec :family "Alegreya" :size 16))
 
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 (setq mixed-pitch-variable-pitch-cursor nil)
 
+;; variable pitch causes autocomplete popup to render wrong, and is just
+;; annoying in Org (does dict matching), so just turn it off.
+(setq company-global-modes '(not org-mode org-journal-mode))
+
 (setq display-line-numbers-type 'nil)
+(setq-default left-margin-width 1)
 
 (setq calendar-week-start-day 1)
 (setq display-time-default-load-average nil)
 (display-time-mode)
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. These are the defaults.
-;(setq doom-theme 'doom-spacegrey)
-(setq doom-theme 'doom-solarized-light)
 
 ;;; Helper functions
 (defun mk/org-next-open-task ()
@@ -77,22 +82,27 @@
 
 (use-package! org
   :config
-  (setq org-cycle-separator-lines 2
-        org-startup-folded 'content)
-
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
         org-archive-location "archives/%s_archive::"
         org-default-notes-file (concat org-directory "inbox.org")
         org-reverse-note-order t)
 
+  ;; simple, general settings
+  (setq org-cycle-separator-lines 0
+        org-startup-folded 'content
+        org-pretty-entities t
+        org-hidden-keywords '(title)
+        org-catch-invisible-edits 'show-and-error
+        )
+
   ;; Agenda
   (setq
-        org-agenda-span 1
+        org-agenda-span 3
         org-agenda-start-day "."
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
         org-priority-start-cycle-with-default nil
-        org-use-speed-commands t
+        ;org-use-speed-commands t
         ;; Not sure why need to use todo-state-up when want to use the TODO
         ;; keyword sort order; thought org-todo-keywords would be interpreted in
         ;; prio descending order.
@@ -126,12 +136,32 @@
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
           ))
 
+  ;; (setq org-super-agenda-groups
+  ;;      '(;; Each group has an implicit boolean OR operator between its selectors.
+  ;;        (:name "Today"  ; Optionally specify section name
+  ;;               :time-grid t  ; Items that appear on the time grid
+  ;;               :todo "NEXT")  ; Items that have this TODO keyword
+  ;;        (:name "Important"
+  ;;               ;; Single arguments given alone
+  ;;               :tag "bills"
+  ;;               :priority "A")
+  ;;        ;; Groups supply their own section names when none are given
+  ;;        (:todo "WAIT" :order 8)  ; Set order of this section
+  ;;        (:priority<= "B"
+  ;;                     ;; Show this section after "Today" and "Important", because
+  ;;                     ;; their order is unspecified, defaulting to 0. Sections
+  ;;                     ;; are displayed lowest-number-first.
+  ;;                     :order 1)
+  ;;        ;; After the last group, the agenda will display items that didn't
+  ;;        ;; match any of these groups, with the default order position of 99
+  ;;        ))
+
   ;; Patterned on:
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
         (quote ((sequence
                  "WAIT(w@)"
-                 "STARTED(s)"
+                 "WIP(s)"
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
@@ -177,9 +207,9 @@
    ;; global map mappings
    ("C-c s" . mk/org-resort-todos)
    ("C-c j" . mk/jump-to-end-of-journal)
-   ("C-c n" . mk/org-narrow-to-subtree)
    :map org-mode-map
    ;; org-mode map mappings (useful for overrides)
+   ("C-c n" . mk/org-narrow-to-subtree)
    )
   )  ;; end of "use-package! org"
 
@@ -291,11 +321,6 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-;; (use-package! beacon
-;;   :diminish
-;;   :config (setq beacon-color "#666600")
-;;   :hook   ((org-mode text-mode) . beacon-mode))
-
 (use-package org-roam
       :after org
       ;:hook
@@ -322,8 +347,13 @@
 ;; Use 'deft' in conjunction with 'org-roam'.
 (use-package deft
   :after org
-  :bind
-  ("C-c z d" . deft)
+  :bind (
+         ;; global
+         ("C-c z d" . deft)
+         ;; within deft-mode
+         :map deft-mode-map
+         ("C-c C-o" . deft-open-file-other-window)
+         )
   :custom
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
@@ -339,7 +369,7 @@
   :custom
   (org-journal-date-prefix "#+TITLE: ")
   (org-journal-file-format "%Y-%m-%d.org")
-  (org-journal-dir "~/org/zettels")
+  (org-journal-dir "~/org/journal")
   (org-journal-date-format "%A, %d %B %Y"))
 
 ;; Turn on auto-fill-mode for key major modes.
@@ -352,3 +382,26 @@
 
 ;; Set this so redo (C-r) works.
 ;(set-evil-undo-system 'undo-fu)         ; alternative: 'undo-tree
+
+(add-hook 'org-mode-hook 'org-appear-mode)
+(setq org-appear-autolinks t
+      org-appear-autoentities t
+      org-appear-autokeywords t
+      org-appear-delay 0.5)
+
+;; focus-mode setup
+;; Based on: https://orgmode.org/list/87r1wd32kg.fsf@gmail.com/T/
+(defun forward-subtree (&optional N)
+   "Forward one orgmode-heading for thing-at-point"
+   (interactive "p")
+   (if (= N -1)
+       (org-backward-heading-same-level 1)
+     (org-forward-heading-same-level 1)))
+
+(setq focus-mode-to-thing '((org-mode . subtree)))
+;; now just run focus-mode
+
+;; fix for deft-mode bindings not loading
+;; src: https://github.com/hlissner/doom-emacs/issues/3271
+;(add-hook 'deft-mode-hook #'evil-normalize-keymaps
+;; made things worse
