@@ -207,9 +207,9 @@
    ;; global map mappings
    ("C-c s" . mk/org-resort-todos)
    ("C-c j" . mk/jump-to-end-of-journal)
-   ("C-c n" . mk/org-narrow-to-subtree)
    :map org-mode-map
    ;; org-mode map mappings (useful for overrides)
+   ("C-c n" . mk/org-narrow-to-subtree)
    )
   )  ;; end of "use-package! org"
 
