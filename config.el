@@ -193,6 +193,7 @@
   ;; TODO: should this be outside the use-package?
   (require 'org-superstar)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿"))
   (setq org-superstar-item-bullet-alist
         '((?* . ?•)
           (?+ . ?-)
