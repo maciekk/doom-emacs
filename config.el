@@ -93,6 +93,9 @@
         org-pretty-entities t
         org-hidden-keywords '(title)
         org-catch-invisible-edits 'show-and-error
+        ;;org-log-done 'time
+        ;;org-log-done-with-time t
+        org-log-into-drawer t
         )
 
   ;; Agenda
@@ -165,7 +168,7 @@
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
-                 "DONE(d)"
+                 "DONE(d!)"
                  "DROP(c@)"))))
   ;;(setq org-global-properties
   ;;'(("Effort_ALL" .
