@@ -214,6 +214,7 @@
    :map org-mode-map
    ;; org-mode map mappings (useful for overrides)
    ("C-c n" . mk/org-narrow-to-subtree)
+   ("C-c r" . org-refile)
    )
   )  ;; end of "use-package! org"
 
@@ -221,7 +222,7 @@
 ;; (use-package! evil-org
 ;;   :config
 ;;   (map! :map evil-org-mode-map
-;;         ;; revent RET binding in normal mode to just RET (was +org/dwim-at-point)
+;;         ;; revert RET binding in normal mode to just RET (was +org/dwim-at-point)
 ;;         :n [return] #'evil-ret
 ;;         :n "RET"    #'evil-ret))
 
