@@ -326,30 +326,29 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-(use-package org-roam
-      :after org
-      ;:hook
-      ;((org-mode . org-roam-mode)
-      ; (after-init . org-roam--build-cache-async) ;; optional!
-      ; )
-      ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
-      :custom
-      (org-roam-directory "~/org/zettels")
-      (org-roam-link-title-format "R:%s")
-      :bind
-      ("C-c z l" . org-roam)
-      ("C-c z t" . org-roam-today)
-      ("C-c z f" . org-roam-find-file)
-      ("C-c z i" . org-roam-insert)
-      ("C-c z g" . org-roam-show-graph)
-      ("C-c (" . org-mark-ring-goto))
+;;(use-package org-roam
+;;      :after org
+;;      ;:hook
+;;      ;((org-mode . org-roam-mode)
+;;      ; (after-init . org-roam--build-cache-async) ;; optional!
+;;      ; )
+;;      ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
+;;      :custom
+;;      (org-roam-directory "~/org/zettels")
+;;      (org-roam-link-title-format "R:%s")
+;;      :bind
+;;      ("C-c z l" . org-roam)
+;;      ("C-c z t" . org-roam-today)
+;;      ("C-c z f" . org-roam-find-file)
+;;      ("C-c z i" . org-roam-insert)
+;;      ("C-c z g" . org-roam-show-graph)
+;;      ("C-c (" . org-mark-ring-goto))
 
 ;; The following are based org-roam "ecosystem" suggestions.
 ;; See: https://org-roam.readthedocs.io/en/latest/ecosystem/
 
 ;; Also, read: https://blog.jethro.dev/posts/how_to_take_smart_notes_org/
 
-;; Use 'deft' in conjunction with 'org-roam'.
 (use-package deft
   :after org
   :bind (
@@ -365,9 +364,6 @@
   (deft-default-extension "org")
   (deft-directory "~/org/zettels"))
 
-;; Use 'org-journal' in conjunction with 'org-roam'.
-;; TODO: actually try this out. May involve installing 'org-journal'.
-;; Link for latter: https://github.com/bastibe/org-journal
 (use-package org-journal
   :bind
   ("C-c J" . org-journal-new-entry)
@@ -375,7 +371,11 @@
   (org-journal-date-prefix "#+TITLE: ")
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-dir "~/org/journal")
-  (org-journal-date-format "%A, %d %B %Y"))
+  (org-journal-date-format "%A, %d %B %Y")
+  (org-journal-time-format "")) ;; don't want entries prefixed with time
+
+;; Switch to Insert mode on entry creation.
+(add-hook 'org-journal-after-entry-create-hook 'evil-insert-state)
 
 ;; Turn on auto-fill-mode for key major modes.
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -410,3 +410,5 @@
 ;; src: https://github.com/hlissner/doom-emacs/issues/3271
 ;(add-hook 'deft-mode-hook #'evil-normalize-keymaps
 ;; made things worse
+
+(solaire-global-mode +1)
