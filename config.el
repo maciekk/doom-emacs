@@ -36,7 +36,12 @@
 
 ;; variable pitch causes autocomplete popup to render wrong, and is just
 ;; annoying in Org (does dict matching), so just turn it off.
-(setq company-global-modes '(not org-mode org-journal-mode))
+;(setq company-global-modes '(not org-mode org-journal-mode))
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
 
 (setq display-line-numbers-type 'nil)
 (setq-default left-margin-width 1)
@@ -119,7 +124,8 @@
         org-hide-emphasis-markers t)
 
   (setq org-agenda-files (list org-directory
-                               (concat org-directory "projects")))
+                               (concat org-directory "projects")
+                               (concat org-directory "plans")))
   (setq org-agenda-custom-commands
         '(
           ;; ("n" "NOW view"
@@ -168,7 +174,7 @@
                  "NEXT(n)"
                  "TODO(t)"
                  "|"
-                 "DONE(d!)"
+                 "DONE(d)"
                  "DROP(c@)"))))
   ;;(setq org-global-properties
   ;;'(("Effort_ALL" .
@@ -412,3 +418,25 @@
 ;; made things worse
 
 (solaire-global-mode +1)
+
+;; Grabbed from:
+;;   https://www.reddit.com/r/emacs/comments/4emyt2/how_to_properly_configure_keybindings_for_evil/
+(define-key evil-insert-state-map (kbd "C-x C-s")
+  (defun evil-save-and-enter-normal-state ()
+    "Save buffer and go to normal state."
+    (interactive)
+    (save-buffer)
+    (evil-normal-state)))
+
+;; Turn off spellcheck (using company mode) in org
+;; Based on:
+;;   https://tecosaur.github.io/emacs-config/config.html
+(set-company-backend!
+  '(text-mode
+    markdown-mode
+    org-mode)
+  '(:seperate
+    ;company-ispell
+    company-dabbrev
+    company-files
+    company-yasnippet))
