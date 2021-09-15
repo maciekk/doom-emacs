@@ -111,7 +111,7 @@
 
   ;; Agenda
   (setq
-        org-agenda-span 3
+        org-agenda-span 1
         org-agenda-start-day "."
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
