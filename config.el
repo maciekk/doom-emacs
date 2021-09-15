@@ -85,6 +85,12 @@
         (org-narrow-to-subtree))
       (widen)))
 
+; Based on https://emacs.stackexchange.com/questions/864/how-to-bind-a-key-to-a-specific-agenda-command-list-in-org-mode
+(defun mk/org-agenda (&optional arg)
+  "Bring up my preferred Agenda style."
+  (interactive "P")
+  (org-agenda arg "z"))
+
 (use-package! org
   :config
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
@@ -105,7 +111,7 @@
 
   ;; Agenda
   (setq
-        org-agenda-span 3
+        org-agenda-span 1
         org-agenda-start-day "."
         org-agenda-window-setup 'only-window
         org-agenda-tags-column 'auto
@@ -215,12 +221,16 @@
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
   :bind (
    ;; global map mappings
+   ("C-c a" . mk/org-agenda)
    ("C-c s" . mk/org-resort-todos)
    ("C-c j" . mk/jump-to-end-of-journal)
    :map org-mode-map
    ;; org-mode map mappings (useful for overrides)
    ("C-c n" . mk/org-narrow-to-subtree)
    ("C-c r" . org-refile)
+   :map org-agenda-mode-map
+   ;; mappings for when showing Agenda view
+   ("C-c r" . org-agenda-refile)
    )
   )  ;; end of "use-package! org"
 
