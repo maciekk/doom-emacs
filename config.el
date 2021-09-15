@@ -228,6 +228,9 @@
    ;; org-mode map mappings (useful for overrides)
    ("C-c n" . mk/org-narrow-to-subtree)
    ("C-c r" . org-refile)
+   :map org-agenda-mode-map
+   ;; mappings for when showing Agenda view
+   ("C-c r" . org-agenda-refile)
    )
   )  ;; end of "use-package! org"
 
