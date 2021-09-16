@@ -190,7 +190,7 @@
            "* TODO %?\n")
           ("T" "Todo w/context" entry (file+headline ,(concat org-directory "inbox.org") "Tasks")
            "* TODO %?\n  %a")
-          ("j" "Journal" entry (file+datetree ,(concat org-directory "journal.org"))
+          ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
            "* %?\n")))
 
   ;; Switch to Insert mode whenever entering context note (e.g., TODO -> WAIT transition)
