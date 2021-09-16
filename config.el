@@ -228,11 +228,13 @@
    ;; org-mode map mappings (useful for overrides)
    ("C-c n" . mk/org-narrow-to-subtree)
    ("C-c r" . org-refile)
-   :map org-agenda-mode-map
-   ;; mappings for when showing Agenda view
-   ("C-c r" . org-agenda-refile)
    )
   )  ;; end of "use-package! org"
+
+;; Unfortunately can't bind org-agenda-mode-map keys above because org-agenda
+;; won't be loaded yet (and thus get void variable error).
+(after! org-agenda
+  (define-key org-agenda-mode-map (kbd "C-c r") 'org-agenda-refile))
 
 ;; Disabled for now because breaks navigation in org-roam.
 ;; (use-package! evil-org
