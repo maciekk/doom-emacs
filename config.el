@@ -91,6 +91,35 @@
   (interactive "P")
   (org-agenda arg "z"))
 
+;; With org-roam v2, PROPERTY drawers abound; prefer to hide them.
+;; Solution from:
+;;   https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2#hiding-the-properties-drawer
+(defun org-hide-properties ()
+  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'hidden-prop-drawer t))))
+  (put 'org-toggle-properties-hide-state 'state 'hidden))
+
+(defun org-show-properties ()
+  "Show all org-mode property drawers hidden by org-hide-properties."
+  (interactive)
+  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
+  (put 'org-toggle-properties-hide-state 'state 'shown))
+
+(defun org-toggle-properties ()
+  "Toggle visibility of property drawers."
+  (interactive)
+  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+      (org-show-properties)
+    (org-hide-properties)))
+
+
 (use-package! org
   :config
   (setq org-directory "~/org/GTD/"  ; used for capture, agenda
@@ -229,6 +258,7 @@
    ("C-c n" . mk/org-narrow-to-subtree)
    ("C-c r" . org-refile)
    ("C-c b" . org-mark-ring-goto)
+   ("C-c P" . org-toggle-properties)
    )
   )  ;; end of "use-package! org"
 
@@ -369,8 +399,8 @@
 ;; NOTE: the define-keys don't work... wrong keymap???
 (after! org-roam
   (setq org-roam-directory (file-truename "~/org/zettels"))
-  (define-key org-roam-node-map (kbd "C-c b") #'org-mark-ring-goto)
-  (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing)
+  ;(define-key org-roam-node-map (kbd "C-c b") #'org-mark-ring-goto)
+  ;(define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing)
   )
 
 ;; The following are based org-roam "ecosystem" suggestions.
