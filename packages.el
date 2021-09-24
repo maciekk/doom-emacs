@@ -54,8 +54,6 @@
 ;; Disable package, it introduces unnecessary :ID:s during org-capture.
 (package! org-bookmark-heading :disable t)
 
-;(package! org-roam :recipe (:type git :host github :repo "jethrokuan/org-roam"))
-
 (package! org-fancy-priorities)
 
 (package! org-superstar)
@@ -72,3 +70,6 @@
 (when (featurep! :tools magit)
   (package! magit-section)
   (package! orgit :pin "e7cddf39e301c87c36c7de13e429dee74874d5c8"))
+
+;; pull in v2 or org-roam
+(unpin! org-roam)

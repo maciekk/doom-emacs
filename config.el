@@ -228,6 +228,7 @@
    ;; org-mode map mappings (useful for overrides)
    ("C-c n" . mk/org-narrow-to-subtree)
    ("C-c r" . org-refile)
+   ("C-c b" . org-mark-ring-goto)
    )
   )  ;; end of "use-package! org"
 
@@ -344,23 +345,33 @@
 ;; See: https://github.com/hlissner/doom-emacs/issues/216
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-;;(use-package org-roam
-;;      :after org
-;;      ;:hook
-;;      ;((org-mode . org-roam-mode)
-;;      ; (after-init . org-roam--build-cache-async) ;; optional!
-;;      ; )
-;;      ;;:straight (:host github :repo "jethrokuan/org-roam" :branch "develop")
-;;      :custom
-;;      (org-roam-directory "~/org/zettels")
-;;      (org-roam-link-title-format "R:%s")
-;;      :bind
-;;      ("C-c z l" . org-roam)
-;;      ("C-c z t" . org-roam-today)
-;;      ("C-c z f" . org-roam-find-file)
-;;      ("C-c z i" . org-roam-insert)
-;;      ("C-c z g" . org-roam-show-graph)
-;;      ("C-c (" . org-mark-ring-goto))
+;; org-roam v1 config
+;(use-package org-roam
+;      :after org
+;      ;:hook
+;      ;((org-mode . org-roam-mode)
+;      ; (after-init . org-roam--build-cache-async) ;; optional!
+;      ; )
+;      :custom
+;      (org-roam-directory "~/org/zettels")
+;      (org-roam-link-title-format "R:%s")
+;      :bind
+;      ("C-c z l" . org-roam)
+;      ("C-c z t" . org-roam-today)
+;      ("C-c z f" . org-roam-find-file)
+;      ("C-c z i" . org-roam-insert)
+;      ("C-c z g" . org-roam-show-graph)
+;      ("C-c (" . org-mark-ring-goto))
+
+;; v2 setup, based on:
+;;   https://org-roam.discourse.group/t/doom-emacs-how-to-upgrade-org-roam/764/3
+;; NOTE: apparently org-roam does not handle symlinks well, hence `file-truename'.
+;; NOTE: the define-keys don't work... wrong keymap???
+(after! org-roam
+  (setq org-roam-directory (file-truename "~/org/zettels"))
+  (define-key org-roam-node-map (kbd "C-c b") #'org-mark-ring-goto)
+  (define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing)
+  )
 
 ;; The following are based org-roam "ecosystem" suggestions.
 ;; See: https://org-roam.readthedocs.io/en/latest/ecosystem/
@@ -410,7 +421,7 @@
 (setq org-appear-autolinks t
       org-appear-autoentities t
       org-appear-autokeywords t
-      org-appear-delay 0.5)
+      org-appear-delay 1.5)
 
 ;; focus-mode setup
 ;; Based on: https://orgmode.org/list/87r1wd32kg.fsf@gmail.com/T/
