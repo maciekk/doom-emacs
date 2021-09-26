@@ -62,7 +62,7 @@
   - first, by TODO keyword (e.g., DONE > STARTED > NEXT > TODO)
   - second, by PRIORITY"
   (interactive)
-  (outline-up-heading 10)
+  (outline-up-heading 1)
   (org-sort-entries t ?p)
   (org-sort-entries t ?o)
   (org-overview)
