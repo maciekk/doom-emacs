@@ -401,6 +401,10 @@
   (setq org-roam-directory (file-truename "~/org/zettels"))
   ;(define-key org-roam-node-map (kbd "C-c b") #'org-mark-ring-goto)
   ;(define-key org-roam-mode-map [mouse-1] #'org-roam-visit-thing)
+
+  ;; Do not want the backlinks buffer to have line wrapping.
+  ;; Source: https://org-roam.discourse.group/t/doom-emacs-how-to-upgrade-org-roam/764/3
+  (remove-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
   )
 
 ;; The following are based org-roam "ecosystem" suggestions.
