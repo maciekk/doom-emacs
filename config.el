@@ -497,3 +497,12 @@
     company-dabbrev
     company-files
     company-yasnippet))
+
+(setq evil-snipe-scope 'whole-buffer)
+;(custom-set-faces!
+;  '(evil-snipe-first-match-face :weight bold :foreground "black" :background "white")
+;  '(evil-snipe-matches-face :weight normal :foreground "black" :background "grey"))
+
+(setq blink-cursor-delay 0.2)
+(setq blink-cursor-interval 0.15)
+(blink-cursor-mode)
