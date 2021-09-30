@@ -178,6 +178,18 @@
           ("N" "-= NOW =-"
            ((todo "NEXT"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))))
+          ("d" "DONE & DROP"
+           ((todo "DONE")
+            (todo "DROP")))
+          ("b" "BIG ROCKS today"
+           ((org-ql-block '(and (tags "big")
+                                (scheduled :to today))
+                          ((org-ql-block-header "Today's Big Rocks")))))
+          ("B" "pebbles today"
+           ((org-ql-block '(and (not (tags "big"))
+                                (not (or (todo "DONE") (todo "DROP")))
+                                (scheduled :to today))
+                          ((org-ql-block-header "Today's little pebbles")))))
           ))
 
   ;; (setq org-super-agenda-groups
