@@ -510,3 +510,8 @@
 (setq blink-cursor-delay 0.2)
 (setq blink-cursor-interval 0.15)
 (blink-cursor-mode)
+
+;; Facilitate linking of Info nodes in org.
+;; Source: https://stackoverflow.com/questions/10445285/org-mode-embed-links-to-info-files
+;;   (in particular, see the Christ Hunt comment, about DOOM Emacs)
+(after! org (add-to-list 'org-modules 'ol-info))
