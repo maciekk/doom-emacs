@@ -336,14 +336,6 @@
 (after! ace-window
   (setq aw-keys '(?a ?e ?o ?u ?i ?d ?h ?t ?n)))
 
-;; Disable addition of :ID:s to captured TODO items.
-;; Alas, doesn't fix things.
-;(after! org (setq
-;             org-id-track-globally nil
-;             org-id-locations-file nil
-;             org-id-locations-file-relative nil
-;             ))
-
 ;; Put back C-d and C-u bindings to scroll Ivy minibuffer.
 ;; But don't be too shy to try out more advanced options using M-o.
 (after! ivy
