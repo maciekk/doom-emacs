@@ -458,7 +458,8 @@
 ;(add-hook 'deft-mode-hook #'evil-normalize-keymaps
 ;; made things worse
 
-(solaire-global-mode +1)
+;; Disabling for now, as causes issues (e.g., makes evil-goggles ineffective)
+;(solaire-global-mode +1)
 
 ;; Grabbed from:
 ;;   https://www.reddit.com/r/emacs/comments/4emyt2/how_to_properly_configure_keybindings_for_evil/
