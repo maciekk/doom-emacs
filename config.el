@@ -521,5 +521,5 @@
 ;; By default though, evil bindings fail on super-agenda headings.
 ;; See issue: https://github.com/alphapapa/org-super-agenda/issues/50
 ;; Let's try some fixes from said thread.
-(after! org
+(after! evil-org-agenda
   (setq org-super-agenda-header-map evil-org-agenda-mode-map))
