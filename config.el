@@ -192,26 +192,6 @@
                           ((org-ql-block-header "Today's little pebbles")))))
           ))
 
-  ;; (setq org-super-agenda-groups
-  ;;      '(;; Each group has an implicit boolean OR operator between its selectors.
-  ;;        (:name "Today"  ; Optionally specify section name
-  ;;               :time-grid t  ; Items that appear on the time grid
-  ;;               :todo "NEXT")  ; Items that have this TODO keyword
-  ;;        (:name "Important"
-  ;;               ;; Single arguments given alone
-  ;;               :tag "bills"
-  ;;               :priority "A")
-  ;;        ;; Groups supply their own section names when none are given
-  ;;        (:todo "WAIT" :order 8)  ; Set order of this section
-  ;;        (:priority<= "B"
-  ;;                     ;; Show this section after "Today" and "Important", because
-  ;;                     ;; their order is unspecified, defaulting to 0. Sections
-  ;;                     ;; are displayed lowest-number-first.
-  ;;                     :order 1)
-  ;;        ;; After the last group, the agenda will display items that didn't
-  ;;        ;; match any of these groups, with the default order position of 99
-  ;;        ))
-
   ;; Patterned on:
   ;;  http://doc.norang.ca/org-mode.html
   (setq org-todo-keywords
@@ -478,7 +458,8 @@
 ;(add-hook 'deft-mode-hook #'evil-normalize-keymaps
 ;; made things worse
 
-(solaire-global-mode +1)
+;; Disabling for now, as causes issues (e.g., makes evil-goggles ineffective)
+;(solaire-global-mode +1)
 
 ;; Grabbed from:
 ;;   https://www.reddit.com/r/emacs/comments/4emyt2/how_to_properly_configure_keybindings_for_evil/
@@ -515,3 +496,30 @@
 ;; Source: https://stackoverflow.com/questions/10445285/org-mode-embed-links-to-info-files
 ;;   (in particular, see the Christ Hunt comment, about DOOM Emacs)
 (after! org (add-to-list 'org-modules 'ol-info))
+
+(setq evil-goggles-duration 0.5)
+
+;; As per official instructions, best to set it at global scope ('setq').
+(setq org-super-agenda-groups
+      '(;; Each group has an implicit boolean OR operator between its selectors.
+        (:name "Today"  ; Optionally specify section name
+         :time-grid t)  ; Items that appear on the time grid
+        (:name "NEXT"
+         :todo "NEXT")  ; Items that have this TODO keyword
+        (:name "Important"
+         :priority> "B")
+        (:name "Big Rocks"
+         :tag "big")
+        ;; Groups supply their own section names when none are given
+        (:name "BLOCKED"
+         :todo "WAIT"
+         :order 8)  ; Set order of this section
+        ;; After the last group, the agenda will display items that didn't
+        ;; match any of these groups, with the default order position of 99
+        ))
+(org-super-agenda-mode)
+;; By default though, evil bindings fail on super-agenda headings.
+;; See issue: https://github.com/alphapapa/org-super-agenda/issues/50
+;; Let's try some fixes from said thread.
+(after! org
+  (setq org-super-agenda-header-map evil-org-agenda-mode-map))
