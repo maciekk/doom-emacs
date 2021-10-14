@@ -505,7 +505,7 @@
         (:name "Today"  ; Optionally specify section name
          :time-grid t)  ; Items that appear on the time grid
         (:name "NEXT"
-         :todo "NEXT")  ; Items that have this TODO keyword
+         :todo ("NEXT" "WIP"))  ; Items that have this TODO keyword
         (:name "Important"
          :priority> "B")
         (:name "Big Rocks"
