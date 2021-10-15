@@ -72,3 +72,5 @@
   (package! orgit :pin "e7cddf39e301c87c36c7de13e429dee74874d5c8"))
 
 (package! org-ql)
+
+(package! mixed-pitch :pin "beb22e85f6073a930f7338a78bd186e3090abdd7")
