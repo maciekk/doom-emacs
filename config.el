@@ -159,8 +159,8 @@
         org-hide-emphasis-markers t)
 
   (setq org-agenda-files (list org-directory
-                               (concat org-directory "projects")
-                               (concat org-directory "plans")))
+                               "~/org/projects"
+                               "~/org/plans"))
   (setq org-agenda-custom-commands
         '(
           ;; ("n" "NOW view"
