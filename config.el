@@ -231,9 +231,9 @@
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   (setq org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿"))
   (setq org-superstar-item-bullet-alist
-        '((?* . ?•)
-          (?+ . ?•)
-          (?- . ?➤)))
+        '((?- . ?•)
+          (?+ . ?‣)
+          (?* . ?•)))
 
   ;; From https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   ;; Specifically, use actual bullet chars in bullet lists.
