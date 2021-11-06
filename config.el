@@ -483,7 +483,11 @@
     company-files
     company-yasnippet))
 
-(setq evil-snipe-scope 'whole-buffer)
+(setq evil-snipe-scope 'visible)
+(setq evil-snipe-repeat-scope 'visible)
+(setq evil-snipe-spillover-scope 'buffer)
+
+
 ;(custom-set-faces!
 ;  '(evil-snipe-first-match-face :weight bold :foreground "black" :background "white")
 ;  '(evil-snipe-matches-face :weight normal :foreground "black" :background "grey"))
